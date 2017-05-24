@@ -8,9 +8,10 @@ Preparación
 -------------
 
 - Dentro de <i class="icon-folder-open"></i> `/PracticaFinalVerificacion`instalar `virutalenv` con el comando `[sudo] pip install virtualenv`.
-- Crear un entorno virtual llamada `pfv` con `virtualenv pfv`.
+- Crear un entorno virtual llamado `pfv` con `virtualenv pfv`.
 - Activar el entorno virtual con `source pfv/bin/activate`
-- A continuación, instalar las dependencias necesarias con `pip install -r requirements`.
+- A continuación, dentro de <i class="icon-folder-open"></i> `/pfv` instalar `pymongo` con `pip install pymongo` (hacer esto antes de crear el proyecto `scrapy`).
+- Copiar y reemplazar los archivos necesarios (esto es temporal).
 
 Ejecución
 -------------
