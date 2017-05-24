@@ -1,9 +1,6 @@
 # PracticaFinalVerificacion
 Practica Final Verificacion
 
-
-Practica Final Verificacion
-
 ----------
 
 
