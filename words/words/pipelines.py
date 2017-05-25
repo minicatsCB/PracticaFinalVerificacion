@@ -28,8 +28,23 @@ class MongoDBPipeline(object):
         self.collection = db[settings['MONGODB_COLLECTION']]
 
 
+    def process_item(self, item, spider):
+        valid = True
+        for data in item:
+            if not data:
+                valid = False
+                raise DropItem("Missing {0}!".format(data))
+        if valid:
+            self.collection.insert(dict(item))
+            log.msg("Question added to MongoDB database!",
+                    level=log.DEBUG, spider=spider)
+        return item
 
 
+
+class WordsCountPipeline():
+    def __init__(self):
+	self.text = "text"
 
     def check_input(self):
         if type(self._text) is str:
@@ -113,7 +128,6 @@ class MongoDBPipeline(object):
         sorted_list = self.sort_freq_dict(freq_list)  # Pairs word:freq (sorted)
         return sorted_list
 
-
     def process_item(self, item, spider):
 	self._text = ' '.join(item['text'])  # Stringify the list wich contains different slices of text
 	self._text = self._text.encode('ascii', 'ignore') # Convert all text from Unicode to ASCCI
@@ -121,12 +135,9 @@ class MongoDBPipeline(object):
         for data in item:
             if not data:
                 valid = False
-                raise DropItem("Missing {0}!".format(data))
         if valid:
 	    result = self.text_analyzer() # Analyze all text
 	    my_dict = {'count': result} # MongoDB needs a dictionary
-            self.collection.insert(dict(my_dict))
-            log.msg("Question added to MongoDB database!",
+            log.msg("Text analyzed!",
                     level=log.DEBUG, spider=spider)
-        return item
-
+        return my_dict
