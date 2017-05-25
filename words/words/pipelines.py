@@ -12,7 +12,7 @@ from scrapy.exceptions import DropItem
 from scrapy import log
 
 
-class WordsPipeline(object):
+class MongoDBPipeline(object):
 
     def __init__(self):
         connection = pymongo.MongoClient(
@@ -33,3 +33,4 @@ class WordsPipeline(object):
             log.msg("Question added to MongoDB database!",
                     level=log.DEBUG, spider=spider)
         return item
+
