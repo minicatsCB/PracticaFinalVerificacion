@@ -65,7 +65,8 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'words.pipelines.MongoDBPipeline': 300,
+    'words.pipelines.WordsCountPipeline': 300,
+    'words.pipelines.MongoDBPipeline': 500,
 }
 MONGODB_SERVER = "localhost"
 MONGODB_PORT = 27017
