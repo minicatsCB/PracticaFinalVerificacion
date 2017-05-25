@@ -32,8 +32,6 @@ class MongoDBPipeline(object):
 
 
     def check_input(self):
-	print("Check Check Check Check Check Check Check Check Check Check Check Check")
-	# print(self._text)
         if type(self._text) is str:
             return str(self._text)
         else:
@@ -117,20 +115,16 @@ class MongoDBPipeline(object):
 
 
     def process_item(self, item, spider):
-	self._text = ' '.join(item['text'])
-	self._text = self._text.encode('ascii', 'ignore')
-	print("En MongoooooooooooooooooooooooooDB")
-	#print(self._text)
-	print("Imprimidoooooooooooooooooooooooooo")
+	self._text = ' '.join(item['text'])  # Stringify the list wich contains different slices of text
+	self._text = self._text.encode('ascii', 'ignore') # Convert all text from Unicode to ASCCI
         valid = True
         for data in item:
             if not data:
                 valid = False
                 raise DropItem("Missing {0}!".format(data))
         if valid:
-	    result = self.text_analyzer()
-	    my_dict = {'count': result}
-	    #print(result)
+	    result = self.text_analyzer() # Analyze all text
+	    my_dict = {'count': result} # MongoDB needs a dictionary
             self.collection.insert(dict(my_dict))
             log.msg("Question added to MongoDB database!",
                     level=log.DEBUG, spider=spider)
