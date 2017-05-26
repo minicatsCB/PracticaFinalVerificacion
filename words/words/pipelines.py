@@ -138,6 +138,8 @@ class WordsCountPipeline():
         if valid:
 	    result = self.text_analyzer() # Analyze all text
 	    my_dict = {'count': result} # MongoDB needs a dictionary
+	    item.update(my_dict) # Add words count the other fields
             log.msg("Text analyzed!",
                     level=log.DEBUG, spider=spider)
-        return my_dict
+        return item
+
