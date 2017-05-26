@@ -11,4 +11,5 @@ from scrapy.item import Item, Field
 class WordsItem(Item):
     text = Field()
     publication_date = Field()
+    count = Field()
 
