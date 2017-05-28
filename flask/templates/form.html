@@ -14,7 +14,11 @@
 	</head>
 	<body>
 		<form action="/processForm" method="POST">
-			<input id="publication-date" type="text" name="publication-date" value="" placeholder="dd/mm/aaaa"></input>
+			<select name='publication-date'>
+				{% for date in dates %}
+					<option value={{ date }}>{{ date }}</option>
+				{% endfor %}
+			</select>
 			<input id="btnExecute" type="submit" value="Execute"></input>
 			<input id="reset" type="reset" value="Reset"></input>
 		</form>
