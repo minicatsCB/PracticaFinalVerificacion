@@ -7,12 +7,12 @@ Practica Final Verificacion
 Preparación
 -------------
 
-- Dentro de <i class="icon-folder-open"></i> `/PracticaFinalVerificacion`instalar `virutalenv` con el comando `[sudo] pip install virtualenv`.
-- Crear un entorno virtual llamado `pfv` con `virtualenv pfv`.
-- Activar el entorno virtual con `source pfv/bin/activate`
-- A continuación, dentro de <i class="icon-folder-open"></i> `/pfv` instalar `pymongo` con `pip install pymongo` (hacer esto antes de crear el proyecto `scrapy`).
-- Copiar y reemplazar los archivos necesarios (esto es temporal).
+- Dentro de <i class="icon-folder-open"></i> `/PracticaFinalVerificion` activar el entorno virtual con `source venv/bin/activate`.
+- Instalar Flask con `[sudo] pip install flask`.
+- Instalar Flask-PyMongo con `[sudo] pip install Flask-PyMongo`.
+- Dejar abierta una conexión con la base de datos MongoDB con `[sudo] service mongod start` (teniendo MongoDB instalado).
 
 Ejecución
 -------------
-- Entrar en el directorio <i class="icon-folder-open"></i> `/words/words/spiders` y ejecutar `scrapy crawl words` para scrappear la página web y obtener un archivo llamado `items.json` con el resultado.
+- Entrar en el directorio <i class="icon-folder-open"></i> `/flask` y ejecutar el comando `python form.py`.
+- Abrir en un navegador la direccin `127.0.0.1:5000` que abrirá la página web.
