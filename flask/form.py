@@ -12,14 +12,16 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def hello():
-	return render_template('form.html')
+	# Get all possible values for dates (as the are saved in database)
+	dates = mongo.db.words.distinct('date')
+	return render_template('form.html', dates = dates)
 
 @app.route('/processForm', methods = ['GET', 'POST'])
 def signup():
 	if request.method == 'POST':
 		# First, obtain the introduced text through the form
-		result = request.form
-		required_date = result['publication-date']
+		required_date = request.form['publication-date']
+		#required_date = '2017-05-28'
 
 		# Get data from the RSS service
 		d = feedparser.parse('http://www.20minutos.es/rss/')
@@ -28,26 +30,23 @@ def signup():
 			text = d.entries[item].summary # type: unicode
 			date = d.entries[item].updated[0:10] # type: unicode
 
+			# Save the result to database
+			mongo.db.words.insert({'text': text, 'date': date})
+
 			# Encode text to ASCII before analyzing it
 			#text = text.encode('ascii', 'ignore')
 
-			# Analyze it
-			cw = CountWords(text)
-			sorted_list = cw.text_analyzer()
-		
-			# Save the result to database
-			mongo.db.words.insert({'count': sorted_list, 'date': date})
-			
-		result = mongo.db.words.find({'date': '2017-05-28'}) # Aquí es donde habria que decirle que busque por fecha
+		result = mongo.db.words.find({'date': required_date}) # Aquí es donde habria que decirle que busque por fecha
+
+		# Analyze it
+		list_to_show = []
+		for doc in result:
+			cw = CountWords(doc['text'])
+			list_to_show.append(cw.text_analyzer()[0:6])  # Show only top used words
 		'''
 		for i in range(len(result)):
 			result[i][1] = result[i][1].encode('ascii', 'ignore')
 		'''
-		#print(result[0]['count'][0:6])
-		# Show only top used words
-		list_to_show = []
-		for doc in result:
-			list_to_show.append(doc['count'][0:6])
 		# Pass the text to the template in order to be showed in the screen
 		return render_template('form.html', result = list_to_show);
 
