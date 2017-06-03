@@ -15,6 +15,7 @@
 	<body>
 		<form action="/processForm" method="POST">
 			<select name='publication-date'>
+				<option value="today">Today</option>
 				{% for date in dates %}
 					<option value={{ date }}>{{ date }}</option>
 				{% endfor %}
