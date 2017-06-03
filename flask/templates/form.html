@@ -23,17 +23,10 @@
 			<input id="reset" type="reset" value="Reset"></input>
 		</form>
 		<div>
-			<!--
-			{% for post in result %}
-				<p>{{ post.count }}</p>
-			{% endfor %}
-			-->
 			{% for doc in result %}
-				<br>
-				{% for count in doc %}
-					<p>{{ count }}</p>
-				{% endfor %}
-			{% endfor %}			
+				<p>{{ doc._id }}</p>
+				<p>{{ doc.total_number }}</p>
+			{% endfor %}		
 		</div>
 	</body>
 
