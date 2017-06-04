@@ -24,33 +24,20 @@
 		<title>My Form</title>
 	</head>
 	<body class="color-2">
-			<!--
-			<form action="/processForm" method="POST">
-				<select id=pub-date-select name='publication-date'>
-					<option value="today">Today</option>
-					{% for date in dates %}
-						<option value={{ date }}>{{ date }}</option>
-					{% endfor %}
-				</select>
-				<input id="btnExecute" type="submit" value="Execute"></input>
-				<input id="reset" type="reset" value="Reset"></input>
-			</form>
-			-->
 			<form action="/processForm" method="POST">
 				<section>
-					<select class="cs-select cs-skin-underline" id=pub-date-select name='publication-date'>
+					<select class="cs-select cs-skin-underline" id="pub-date-select" name="publication-date">
 						<option value="today">Today</option>
 						{% for date in dates %}
-							<option value={{ date }}>{{ date }}</option>
+							<option name={{ date }} value={{ date }}>{{ date }}</option>
 						{% endfor %}
 					</select>
 				</section>
-				<button class="button button--rayen button--border-thin button--text-thick button--text-upper button--size-s" data-text="Execute" id="btnExecute" type="submit" value="Execute" style="float:right;margin-top:-150px"><span>Execute</span></button>
-				<button class="button button--rayen button--border-thin button--text-thick button--text-upper button--size-s" data-text="Reset" id="reset" type="reset" value="Reset" style="float:right;margin-top:-90px"><span>Reset</span></button>
+				<button class="button button--rayen button--border-thin button--text-thick button--text-upper button--size-s" data-text="Execute" id="btnExecute" type="submit" value="Execute" style="display:block"><span>Execute</span></button>
 			</form>
-			<div id="result">
+			<div id="result" style="margin-top:80px">
 				{% for doc in result %}
-					<p id="result-id" style="font-size:100px">{{ doc._id }}, {{ doc.total_number }}</p>
+					<p name="result-id" style="font-size:100px">{{ doc._id }}, {{ doc.total_number }}</p>
 				{% endfor %}		
 			</div>
 		<!-- For CSS Azul <script src="static/js/script1.js"></script> -->
