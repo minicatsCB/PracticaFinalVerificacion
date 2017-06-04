@@ -4,9 +4,6 @@ import re  # For removing HTML tags
 import collections # For count frequency
 import operator  # For sorting by fequency
 import errno
-import sys
-
-import unicodedata
 
 class CountWords(object):
     def __init__(self, text):
@@ -77,6 +74,7 @@ class CountWords(object):
 			'encima','usar','uso','usas','usa','usamos','usais','usan','emplear','empleas','emplean','empleamos','empleais','valor',
 			'muy','era','eras','eramos','eran','modo','mientras','con','entre','sin','trabajar','trabajas','trabajamos','trabajais',
 			'trabajan','podria','podrias','podriamos','podrian','podriais','yo','aquel', 'de', 'que', 'en', 'a', 'el', 'la', 'y', 'del', 'se', 'al', 'han', 'h', 'o'}
+	
 	# Convert string to list
 	word_list = word_list.split()
 
@@ -107,16 +105,7 @@ class CountWords(object):
         word_list = self.convert_to_lowercase()  # Convert to lowercase
 	word_list = self.remove_stopwords(word_list)
         word_list = self.remove_special_characters(word_list)  # Remove special characters
-	#for i in range(len(word_list)):
-	#	word_list[i] = unicodedata.normalize('NFKD', word_list[i]).encode('ascii', 'ignore')
         freq_list = self.word_list_to_freq_list(word_list)  # Pairs word:freq (not sorted)
         sorted_list = self.sort_freq_dict(freq_list)  # Pairs word:freq (sorted)
         return sorted_list
-
-'''
-if __name__ == "__main__":
-    analyzer = CountWords(sys.argv[1])
-    sorted_list = analyzer.text_analyzer()
-    print("Word frequencies: " + str(sorted_list))
-'''
 

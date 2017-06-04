@@ -2,11 +2,10 @@
 
 from flask import Flask, render_template, request
 import feedparser
-import unicodedata
 from CountWords import CountWords
 from flask_pymongo import PyMongo
-import pprint
 import datetime  # For getting current date
+
 
 app = Flask(__name__)
 mongo = PyMongo(app)
@@ -17,13 +16,14 @@ mongo2 = PyMongo(app, config_prefix='MONGO2')
 
 
 @app.route('/')
-def hello():
+def root():
 	# Get all possible values for dates (as they are saved in database)
 	dates = mongo.db.words.distinct('date')
 	return render_template('form.html', dates = dates)
 
+
 @app.route('/processForm', methods = ['GET', 'POST'])
-def signup():
+def execute():
 	if request.method == 'POST':
 		# Obtain the introduced text through the form
 		required_date = request.form['publication-date']
@@ -33,19 +33,15 @@ def signup():
 		if(required_date == "today"):
 			# Get current date (it can't be the string "today")
 			required_date = str(datetime.datetime.now())[0:10]
-			if(mongo.db.words.find_one({'date': required_date}) == None):
+			if(mongo.db.words.find_one({'date': required_date}) is None):
 				# Get data from the RSS service (returns multiple items)
 				d = feedparser.parse('http://www.20minutos.es/rss/')
 
 				# Save articles to database
 				for item in range(len(d)):
 					text = d.entries[item].summary # type: unicode
-					date = d.entries[item].updated[0:10] # type: unicode
 
 					mongo.db.words.insert({'text': text, 'date': required_date})
-
-					# Encode text to ASCII before analyzing it
-					#text = text.encode('ascii', 'ignore')
 
 		# If the user want older articles, get them from database
 		result = mongo.db.words.find({'date': required_date})
@@ -68,11 +64,12 @@ def signup():
 				all_dictionaries[i].update({list_to_show[i][j][0]: list_to_show[i][j][1]})
 		
 		# Save all dictionaries in a different database, if they are not saved yet
-		if(mongo2.db.words.find_one({'date': required_date}) == None):
+		if(mongo2.db.words.find_one({'date': required_date}) is None):
 			for i in range(len(all_dictionaries)):
 				for j in range(len(all_dictionaries[i].keys())):
-					#mongo2.db.words.insert({'date': date, 'count': all_dictionaries[i]}) # Inserta todo dentro de 'count' para cada noticia
-					mongo2.db.words.insert({'date': required_date, 'count': {'word': all_dictionaries[i].keys()[j], 'number': all_dictionaries[i].values()[j]}}) # Crea un documento palabra número dentro de 'count' (mejorar para que guarde por cada noticia)
+					# Create a document with two fields inside 'count' field: "word" and "number"
+					# Do not differentiate articles, but do dates
+					mongo2.db.words.insert({'date': required_date, 'count': {'word': all_dictionaries[i].keys()[j], 'number': all_dictionaries[i].values()[j]}})
 
 		# Get top used words for the required date (sorted)
 		pipeline = [{"$match": {"date": required_date}}, 
@@ -82,15 +79,13 @@ def signup():
 		{"$limit": 5}]
 		aggregate = list(mongo2.db.words.aggregate(pipeline))
 
-		#for i in range(len(result)):
-		#	result[i][1] = result[i][1].encode('ascii', 'ignore')
-
 		# Get all possible values for dates (as they are saved in database)
 		dates = mongo.db.words.distinct('date')
 
 		# Pass the top used words to the template in order to be showed in the screen
-		return render_template('form.html',  dates = dates, result = aggregate);
+		return render_template('form.html',  dates = dates, result = aggregate)
 
 
 if __name__ == "__main__":
 	app.run(debug = True)
+
