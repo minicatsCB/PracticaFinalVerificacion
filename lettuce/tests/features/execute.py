@@ -4,21 +4,24 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 
+
 @step('the date "([^"]*)"')
 def have_the_date(step, expected):
 	world.browser.get("http://127.0.0.1:5000")
 	# Make dropdown list visible in order to select one of its option
-	world.browser.execute_script("document.getElementById('pub-date-select').setAttribute('style', 'display:block')");
+	world.browser.execute_script("document.getElementById('pub-date-select').setAttribute('style', 'display:block')")
 	select = Select(world.browser.find_element_by_id('pub-date-select'))
 	select.select_by_value(expected.lower())
 	selected_option = select.first_selected_option
 	assert True, selected_option.get_attribute('value') == expected.lower()
+
 
 @step('I press Execute button')
 def press_execute_button(step):
 	execute_button = world.browser.find_element_by_id("btnExecute")
 	execute_button.click()
 	assert True, execute_button.get_attribute('value') == True
+
 
 @step('I see words count section with "([^"]*)"')
 def see_words_count_section_with(step, expected):
@@ -30,8 +33,9 @@ def see_words_count_section_with(step, expected):
 	expected_elements_list = expected.split("-")
 	assert True, expected_elements_list == current_elements_list
 
+
 @step('I see "([^"]*)" option selected')
 def see_default_option_selected(step, expected):
 	select = Select(world.browser.find_element_by_id("pub-date-select"))
 	selected_option = select.first_selected_option
-    	assert True, selected_option.tget_attribute('value') == expected.lower()
+	assert True, selected_option.tget_attribute('value') == expected.lower()
