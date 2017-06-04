@@ -27,7 +27,6 @@ def signup():
 	if request.method == 'POST':
 		# Obtain the introduced text through the form
 		required_date = request.form['publication-date']
-		#required_date = '2017-06-03'  # To update
 
 		# If the user want today articles, check if they are already in database
 		# Only get them from RSS if they are not saved yet in database
@@ -48,7 +47,7 @@ def signup():
 					# Encode text to ASCII before analyzing it
 					#text = text.encode('ascii', 'ignore')
 
-		# If the user want older articles, get them form database
+		# If the user want older articles, get them from database
 		result = mongo.db.words.find({'date': required_date})
 
 		# Analyze each article
@@ -86,8 +85,11 @@ def signup():
 		#for i in range(len(result)):
 		#	result[i][1] = result[i][1].encode('ascii', 'ignore')
 
+		# Get all possible values for dates (as they are saved in database)
+		dates = mongo.db.words.distinct('date')
+
 		# Pass the top used words to the template in order to be showed in the screen
-		return render_template('form.html', result = aggregate);
+		return render_template('form.html',  dates = dates, result = aggregate);
 
 
 if __name__ == "__main__":
