@@ -1,7 +1,5 @@
 from lettuce import *
-import lettuce_webdriver.webdriver
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 
 @before.all
 def setup_browser():
