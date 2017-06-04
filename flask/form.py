@@ -6,6 +6,7 @@ import unicodedata
 from CountWords import CountWords
 from flask_pymongo import PyMongo
 import pprint
+import datetime  # For getting current date
 
 app = Flask(__name__)
 mongo = PyMongo(app)
@@ -30,20 +31,22 @@ def signup():
 
 		# If the user want today articles, check if they are already in database
 		# Only get them from RSS if they are not saved yet in database
-		if(required_date == "2017-06-03" and mongo.db.words.find_one({'date': required_date} == None)):
-			print("Aqui no deberia entrar 03")
-			# Get data from the RSS service (returns multiple items)
-			d = feedparser.parse('http://www.20minutos.es/rss/')
+		if(required_date == "today"):
+			# Get current date (it can't be the string "today")
+			required_date = str(datetime.datetime.now())[0:10]
+			if(mongo.db.words.find_one({'date': required_date}) == None):
+				# Get data from the RSS service (returns multiple items)
+				d = feedparser.parse('http://www.20minutos.es/rss/')
 
-			# Save articles to database
-			for item in range(len(d)):
-				text = d.entries[item].summary # type: unicode
-				date = d.entries[item].updated[0:10] # type: unicode
+				# Save articles to database
+				for item in range(len(d)):
+					text = d.entries[item].summary # type: unicode
+					date = d.entries[item].updated[0:10] # type: unicode
 
-				mongo.db.words.insert({'text': text, 'date': date})
+					mongo.db.words.insert({'text': text, 'date': required_date})
 
-				# Encode text to ASCII before analyzing it
-				#text = text.encode('ascii', 'ignore')
+					# Encode text to ASCII before analyzing it
+					#text = text.encode('ascii', 'ignore')
 
 		# If the user want older articles, get them form database
 		result = mongo.db.words.find({'date': required_date})
@@ -67,7 +70,6 @@ def signup():
 		
 		# Save all dictionaries in a different database, if they are not saved yet
 		if(mongo2.db.words.find_one({'date': required_date}) == None):
-			print("Hey desde anaylisis")
 			for i in range(len(all_dictionaries)):
 				for j in range(len(all_dictionaries[i].keys())):
 					#mongo2.db.words.insert({'date': date, 'count': all_dictionaries[i]}) # Inserta todo dentro de 'count' para cada noticia
