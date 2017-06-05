@@ -1,5 +1,5 @@
 # PracticaFinalVerificacion
-Practica Final Verificacion
+Practica Final Verificacion Rubén Amador, Isabel Díaz
 
 ----------
 
